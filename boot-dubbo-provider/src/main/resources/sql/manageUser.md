@@ -1,0 +1,3 @@
+findByName
+===
+    SELECT * FROM MANAGE_USER WHERE MANAGE_NAME=#userName#
