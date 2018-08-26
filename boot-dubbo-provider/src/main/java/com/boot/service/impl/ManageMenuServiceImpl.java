@@ -10,15 +10,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.boot.dao.ManageMenuDao;
 import com.boot.dao.ManageUserDao;
 import com.boot.domain.ManageMenu;
-import com.boot.dto.AuthDTO;
 import com.boot.dto.RouterMenuDTO;
 import com.boot.service.ManageMenuService;
-import com.common.PageRet;
 import com.common.Result;
 import com.common.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,68 +33,39 @@ public class ManageMenuServiceImpl implements ManageMenuService {
 
 
     @Override
-    public Result getMenu(String roleId) {
-        List<ManageMenu> parentMenuList=manageMenuDao.queryParentMenuListByRoleId(roleId);
+    public Result getMenu(Integer userType) {
+        List<ManageMenu> parentMenuList=manageMenuDao.queryParentMenuListByUserType(userType);
         List<RouterMenuDTO> routers=new ArrayList<>();
         for (ManageMenu menu:parentMenuList
                 ) {
             RouterMenuDTO parentMenuDTO = new RouterMenuDTO();
-            parentMenuDTO.setName(menu.getMenuName());
+            parentMenuDTO.setLabel(menu.getMenuName());
             parentMenuDTO.setPath(menu.getMenuPath());
             parentMenuDTO.setAuth(menu.getMenuAuth());
             parentMenuDTO.setIcon("earth");
             parentMenuDTO.setTitle(menu.getMenuName());
-            parentMenuDTO.setChildren(getChildMenuDTO(menu.getMenuId(),roleId));
+            List<RouterMenuDTO> childList = getChildMenuDTO(menu.getMenuId(),userType);
+            if(childList.size()>0){
+                parentMenuDTO.setSubmenu(childList);
+            }
             routers.add(parentMenuDTO);
         }
         return ResultGenerator.genSuccessResult(routers);
     }
 
-    @Override
-    public Result menuAuth(String path, String role) {
-        AuthDTO authDTO=new AuthDTO();
-        if(WHITE_MENU.contains(path)){
-            authDTO.setRouteAuth(false);
-            authDTO.setRoleAuth(true);
-            return ResultGenerator.genSuccessResult(authDTO);
-        }
-        ManageMenu manageMenu= new ManageMenu();
-        manageMenu.setMenuPath(path);
-        manageMenu=manageMenuDao.templateOne(manageMenu);
-        if(manageMenu.getMenuAuth()){
-            ManageMenu authMenu=manageMenuDao.queryParentMenuListByRoleIdAndPath(role,path);
-            if(authMenu!=null){
-                authDTO.setRouteAuth(manageMenu.getMenuAuth());
-                authDTO.setRoleAuth(true);
-            }else {
-                authDTO.setRouteAuth(manageMenu.getMenuAuth());
-                authDTO.setRoleAuth(false);
-            }
-        }else{
-            authDTO.setRouteAuth(manageMenu.getMenuAuth());
-            authDTO.setRoleAuth(true);
-        }
-        return ResultGenerator.genSuccessResult(authDTO);
-    }
 
-    @Override
-    public PageRet<ManageMenu> getMenuListByPage(ManageMenu manageMenu, Pageable pageable) {
-        return manageMenuDao.getMenuListByPage(manageMenu, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
-    }
-
-
-    public List<RouterMenuDTO> getChildMenuDTO(Integer parentId,String roleId) {
-        List<ManageMenu> childMenu = manageMenuDao.queryMenuByParentId(parentId,roleId);
+    public List<RouterMenuDTO> getChildMenuDTO(Integer parentId,Integer userType) {
+        List<ManageMenu> childMenu = manageMenuDao.queryMenuByParentId(parentId,userType);
         List<RouterMenuDTO> routerMenuDTOS = new ArrayList<>();
         for (ManageMenu child : childMenu
                 ) {
             RouterMenuDTO routerMenuDTO = new RouterMenuDTO();
-            routerMenuDTO.setName(child.getMenuName());
+            routerMenuDTO.setLabel(child.getMenuName());
             routerMenuDTO.setPath(child.getMenuPath());
             routerMenuDTO.setAuth(child.getMenuAuth());
             routerMenuDTO.setIcon("earth");
             routerMenuDTO.setTitle(child.getMenuName());
-            routerMenuDTO.setChildren(getChildMenuDTO(child.getMenuId(),roleId));
+            routerMenuDTO.setSubmenu(getChildMenuDTO(child.getMenuId(),userType));
             routerMenuDTOS.add(routerMenuDTO);
         }
         return routerMenuDTOS;

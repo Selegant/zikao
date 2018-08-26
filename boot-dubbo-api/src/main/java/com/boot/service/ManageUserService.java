@@ -1,5 +1,6 @@
 package com.boot.service;
 
+import com.boot.domain.User;
 import com.common.Result;
 /**
  * @program: solution-parent

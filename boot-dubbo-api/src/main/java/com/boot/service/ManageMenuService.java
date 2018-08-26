@@ -13,9 +13,10 @@ import org.springframework.data.domain.Pageable;
  * @create: 2018-05-23 10:38
  **/
 public interface ManageMenuService {
-    Result getMenu(String roleId);
 
-    Result menuAuth(String path, String role);
+    Result getMenu(Integer userType);
 
-    PageRet<ManageMenu> getMenuListByPage(ManageMenu manageMenu, Pageable pageable);
+//    Result menuAuth(String path, String role);
+//
+//    PageRet<ManageMenu> getMenuListByPage(ManageMenu manageMenu, Pageable pageable);
 }

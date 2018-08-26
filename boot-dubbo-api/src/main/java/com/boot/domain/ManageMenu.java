@@ -1,6 +1,7 @@
 package com.boot.domain;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
 */
 
 @Data
-public class ManageMenu  {
+public class ManageMenu implements Serializable {
 
 	//菜单ID
 	private Integer menuId ;

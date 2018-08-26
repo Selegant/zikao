@@ -4,11 +4,16 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Selegant
+ */
+
 @Data
 public class User implements Serializable {
     private Integer id;
-    private String username;
+    private String userName;
     private String password;
-    private Integer age;
-    private Integer gender;
+    private Integer userType;
+    private String mobile;
+    private String accessToken;
 }

@@ -2,6 +2,7 @@ package com.boot.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 /**
  * @program: solution-parent
@@ -14,13 +15,13 @@ import java.util.List;
  * @description:
  **/
 @Data
-public class RouterMenuDTO {
+public class RouterMenuDTO implements Serializable {
     private String path;
     private String icon;
-    private String name;
+    private String label;
     private String title;
     private String component;
     private Boolean auth;
-    private List<RouterMenuDTO> children;
+    private List<RouterMenuDTO> submenu;
 }
 

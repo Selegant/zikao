@@ -21,12 +21,9 @@ import java.util.List;
  **/
 @Repository
 public interface ManageMenuDao extends BaseMapper<ManageMenu> {
-    List<ManageMenu> queryParentMenuListByRoleId(@Param("roleId") String roleId);
+    List<ManageMenu> queryParentMenuListByUserType(@Param("userType") Integer userType);
 
-    List<ManageMenu> queryMenuByParentId(@Param("parentId") Integer parentId, @Param("roleId") String roleId);
+    List<ManageMenu> queryMenuByParentId(@Param("parentId") Integer parentId, @Param("userType") Integer userType);
 
-    ManageMenu queryParentMenuListByRoleIdAndPath(@Param("roleId") String roleId, @Param("path") String path);
-
-    PageRet<ManageMenu> getMenuListByPage(ManageMenu manageMenu, Pageable pageable);
 }
 

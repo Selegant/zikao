@@ -11,6 +11,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.boot.dao.ManageMenuDao;
 import com.boot.dao.ManageUserDao;
 import com.boot.domain.ManageUser;
+import com.boot.domain.User;
 import com.boot.service.ManageUserService;
 import com.common.Result;
 import com.common.ResultCode;
@@ -48,6 +49,7 @@ public class ManageUserServiceImpl implements ManageUserService {
         }
         return ResultGenerator.genFailResult(ResultCode.ERROR_PASSWORD);
     }
+
 
 
 }
